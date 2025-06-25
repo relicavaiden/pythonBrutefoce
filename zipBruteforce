@@ -1,0 +1,29 @@
+'''
+Forage AIG Cybersecurity Program
+Bruteforce starter template
+'''
+
+from zipfile import ZipFile
+
+def main():
+    print("[+] Beginning bruteforce")
+    with ZipFile('enc.zip') as zf:
+        with open('rockyou.txt', 'rb') as f:
+            for line in f:
+                password = line.strip()  # password is now bytes already (since reading in 'rb' mode)
+                try:
+                    zf.extractall(pwd=password)
+                    print(f'[+] Password found: {password.decode("utf-8", errors="ignore")}')
+                    return  # exit after success
+                except RuntimeError as e:
+                    if 'Bad password' in str(e):
+                        print(f'[-] Tried: {password.decode("utf-8", errors="ignore")}')
+                    else:
+                        print(f'[!] Unexpected error with {password}: {e}')
+                except Exception as e:
+                    print(f'[!] Error with {password}: {e}')
+
+    print("[+] Password not found in list")
+
+if __name__ == "__main__":
+    main()
